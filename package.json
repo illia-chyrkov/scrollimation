@@ -1,0 +1,46 @@
+{
+  "name": "scrollimation",
+  "version": "1.0.2",
+  "description": "A flexible library for animation of elements on scroll.",
+  "keywords": [
+    "animation",
+    "scroll"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ArtRinor/Scrollimation"
+  },
+  "bugs": {
+    "url": "https://github.com/ArtRinor/Scrollimation/issues"
+  },
+  "main": "dist/scrollimation.js",
+  "watch": {
+    "test": {
+      "patterns": [
+        "scrollimation.js",
+        "test/"
+      ],
+      "quiet": true
+    }
+  },
+  "scripts": {
+    "start": "npm-watch",
+    "build": "rollup --config rollup.config.js",
+    "pretest": "npm run build | jshint scrollimation.js test/",
+    "test": "mocha --reporter spec"
+  },
+  "author": "Chirkov Ilya",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "jquery": "^3.3.1",
+    "jsdom": "^12.0.0",
+    "jshint": "^2.9.6",
+    "mocha": "^5.2.0",
+    "npm-watch": "^0.4.0",
+    "rollup": "^0.65.2",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-uglify": "^5.0.2"
+  }
+}
