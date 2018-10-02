@@ -27,7 +27,7 @@
     "start": "npm-watch",
     "build": "rollup --config rollup.config.js",
     "pretest": "npm run build | jshint scrollimation.js test/",
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter spec --exit"
   },
   "author": "Chirkov Ilya",
   "license": "MIT",
