@@ -33,12 +33,22 @@ class ScrollimationWorker {
 	static animate(scrollTop, scrollLeft, state) {
 		state.scrollTop = scrollTop
 		state.scrollLeft = scrollLeft
-
-		state.step(state)
-
 		let scrollPosition = state.direction === 'top' ? scrollTop : scrollLeft
-		if (state.from === scrollPosition) state.start(state)
-		if (state.to === scrollPosition) state.end(state)
+
+		// if (state.from === scrollPosition) state.start(state)
+		// if (state.to === scrollPosition) state.end(state)
+
+		if (scrollPosition >= state.from && !state.startEmitted) {
+			state.startEmitted = true
+			state.start(state)
+		} else if (scrollPosition < state.from) state.startEmitted = false
+
+		if (scrollPosition >= state.to && !state.endEmitted) {
+			state.endEmitted = true
+			state.end(state)
+		} else if (scrollPosition < state.to) state.endEmitted = false
+
+		if (scrollPosition >= state.from && scrollPosition <= state.to) state.step(state)
 	}
 
 	static Throttle(func, ms) {
@@ -125,6 +135,8 @@ class Scrollimation {
 		this.step = config.step || (() => {})
 		this.start = config.start || (() => {})
 		this.end = config.end || (() => {})
+		this.startEmitted = false
+		this.endEmitted = false
 
 		this.target = window.NodeList.prototype.isPrototypeOf(config.target)
 			? [].slice.call(config.target)
