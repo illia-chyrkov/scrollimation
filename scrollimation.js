@@ -41,12 +41,12 @@ class ScrollimationWorker {
 		if (scrollPosition >= state.from && !state.startEmitted) {
 			state.startEmitted = true
 			state.start(state)
-		} else if (scrollPosition < state.from) state.startEmitted = false
+		} else if (scrollPosition <= state.from) state.startEmitted = false
 
 		if (scrollPosition >= state.to && !state.endEmitted) {
 			state.endEmitted = true
 			state.end(state)
-		} else if (scrollPosition < state.to) state.endEmitted = false
+		} else if (scrollPosition <= state.to) state.endEmitted = false
 
 		if (scrollPosition >= state.from && scrollPosition <= state.to) state.step(state)
 	}
