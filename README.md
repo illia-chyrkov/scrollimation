@@ -230,7 +230,7 @@ Scrollimation({
 | :---------- | :----- |
 | `undefined` | Number |
 
-If your animation is too heavy, you can also limits the number of animation steps per second. (with `undefined` value FPS will be around 60)
+If your animation is too heavy, you can also limits the number of animation steps per second. (with `undefined` value FPS will be around 60)  
 You can try to combine this with `mode: 'onscroll'`.
 
 ```javascript
@@ -294,7 +294,7 @@ Scrollimation({
 | :--------- | :------- |
 | `() => {}` | Function |
 
-This function called when the animation begins when the scroll position is state.from. (Only while scrolling from state.from to state.to)
+This function called when the animation begins when the scroll position is state.from. (Only while scrolling from state.from to state.to)  
 It called before the first `step` function is called.
 
 ```javascript
@@ -317,7 +317,7 @@ Scrollimation({
 | :--------- | :------- |
 | `() => {}` | Function |
 
-This function called when the animation ends when the scroll position is state.to. (Only while scrolling from state.from to state.to)
+This function called when the animation ends when the scroll position is state.to. (Only while scrolling from state.from to state.to)  
 It called after the last `step` function is called.
 
 ```javascript
