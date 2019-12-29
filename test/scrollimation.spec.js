@@ -2,7 +2,7 @@ let assert = require('assert')
 let { JSDOM } = require('jsdom')
 
 // Wait until DOM changes take effect
-function wait(time = 0) {
+function wait(time = 50) {
 	return new Promise(resolve => {
 		setTimeout(() => {
 			resolve()
@@ -45,6 +45,8 @@ describe('Single element', function() {
 		assert.equal(typeof instance.step, 'function')
 		assert.equal(typeof instance.start, 'function')
 		assert.equal(typeof instance.end, 'function')
+		assert.equal(typeof instance.reverseStart, 'function')
+		assert.equal(typeof instance.reverseEnd, 'function')
 		assert.equal(typeof instance.easing, 'string')
 		assert.equal(instance.status, 'play')
 	})
@@ -52,18 +54,18 @@ describe('Single element', function() {
 	it('should change element style on scroll', function(done) {
 		document.body.scrollTop = 0
 
-		wait(20)
+		wait()
 			.then(() => {
 				assert.equal(div.style.transform, 'rotate(0deg)')
 				document.body.scrollTop = instance.to / 2
 
-				return wait(20)
+				return wait()
 			})
 			.then(() => {
 				assert.equal(div.style.transform, 'rotate(180deg)')
 				document.body.scrollTop = instance.to
 
-				return wait(20)
+				return wait()
 			})
 			.then(() => {
 				assert.equal(div.style.transform, 'rotate(360deg)')
@@ -73,20 +75,20 @@ describe('Single element', function() {
 
 	it('should stop animation and play again', function(done) {
 		document.body.scrollTop = instance.to / 2
-		wait(20)
+		wait()
 			.then(() => {
 				assert.equal(div.style.transform, 'rotate(180deg)')
 				instance.stop()
 				document.body.scrollTop = 0
 
-				return wait(20)
+				return wait()
 			})
 			.then(() => {
 				assert.equal(div.style.transform, 'rotate(180deg)')
 				instance.play()
 				document.body.scrollTop = instance.to
 
-				return wait(20)
+				return wait()
 			})
 			.then(() => {
 				assert.equal(div.style.transform, 'rotate(360deg)')
@@ -103,16 +105,16 @@ describe('Single element', function() {
 
 		document.body.scrollTop = 0
 
-		wait(20)
+		wait()
 			.then(() => {
 				assert.equal(div.style.top, '0px')
 				document.body.scrollTop = 100
-				return wait(20)
+				return wait()
 			})
 			.then(() => {
 				assert.equal(div.style.top, '250px')
 				document.body.scrollTop = 200
-				return wait(20)
+				return wait()
 			})
 			.then(() => {
 				assert.equal(div.style.top, '500px')
@@ -136,6 +138,26 @@ describe('Single element', function() {
 		}
 
 		document.body.scrollTop = instance.to
+	})
+
+	it('should change reverseStart callback', function(done) {
+		document.body.scrollTop = instance.to + 1
+
+		instance.reverseStart = function(state) {
+			done()
+			instance.reverseStart = () => {}
+		}
+
+		document.body.scrollTop = instance.to
+	})
+
+	it('should change reverseEnd callback', function(done) {
+		instance.reverseEnd = function(state) {
+			done()
+			instance.reverseEnd = () => {}
+		}
+
+		document.body.scrollTop = 0
 	})
 })
 
@@ -178,20 +200,20 @@ describe('Multiple elements', function() {
 	it('should change elements style on scroll', function(done) {
 		document.body.scrollTop = 0
 
-		wait(20)
+		wait()
 			.then(() => {
 				assert.equal(div1.style.transform, 'rotate(0deg)')
 				assert.equal(div2.style.transform, 'rotate(0deg)')
 				document.body.scrollTop = instance.to / 2
 
-				return wait(20)
+				return wait()
 			})
 			.then(() => {
 				assert.equal(div1.style.transform, 'rotate(180deg)')
 				assert.equal(div2.style.transform, 'rotate(180deg)')
 				document.body.scrollTop = instance.to
 
-				return wait(20)
+				return wait()
 			})
 			.then(() => {
 				assert.equal(div1.style.transform, 'rotate(360deg)')
@@ -235,18 +257,18 @@ describe('jQuery element', function() {
 	it('should change element style on scroll', function(done) {
 		document.body.scrollTop = 0
 
-		wait(20)
+		wait()
 			.then(() => {
 				assert.equal(div.style.transform, 'rotate(0deg)')
 				document.body.scrollTop = instance.to / 2
 
-				return wait(20)
+				return wait()
 			})
 			.then(() => {
 				assert.equal(div.style.transform, 'rotate(180deg)')
 				document.body.scrollTop = instance.to
 
-				return wait(20)
+				return wait()
 			})
 			.then(() => {
 				assert.equal(div.style.transform, 'rotate(360deg)')

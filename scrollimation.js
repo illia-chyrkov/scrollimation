@@ -1,32 +1,53 @@
 class ScrollimationWorker {
 	constructor() {
-		let instances = []
+		const instances = []
 		this.instances = instances
 
-		let requestAnimationFrame = ScrollimationWorker.requestAnimationFrame
+		const requestAnimationFrame = ScrollimationWorker.requestAnimationFrame
 		function frame() {
-			let scrollTop = ScrollimationWorker.scrollTop
-			let scrollLeft = ScrollimationWorker.scrollLeft
 			instances.forEach(instance => {
-				if (
-					instance.mode === 'requestAnimationFrame' &&
-					instance.status === 'play'
-				)
-					ScrollimationWorker.animate(scrollTop, scrollLeft, instance)
+				if (instance.mode === 'requestAnimationFrame')
+					instance._handler()
 			})
-
 			requestAnimationFrame(frame)
 		}
 		requestAnimationFrame(frame)
+	}
 
-		window.onscroll = ScrollimationWorker.Throttle(() => {
-			let scrollTop = ScrollimationWorker.scrollTop
-			let scrollLeft = ScrollimationWorker.scrollLeft
-			instances.forEach(instance => {
-				if (instance.mode === 'onscroll' && instance.status === 'play')
-					ScrollimationWorker.animate(scrollTop, scrollLeft, instance)
-			})
-		}, 1000 / 60)
+	/**
+	 * Add new animation instance to worker.
+	 * @param {Object} instance - Animation instance.
+	 */
+	addInstance(instance) {
+		const handler = () => {
+			if (instance.status === 'play') {
+				const scrollTop =
+					instance.scrollContainer === window
+						? ScrollimationWorker.scrollTop
+						: instance.scrollContainer.scrollTop
+				const scrollLeft =
+					instance.scrollContainer === window
+						? ScrollimationWorker.scrollLeft
+						: instance.scrollContainer.scrollLeft
+				ScrollimationWorker.animate(scrollTop, scrollLeft, instance)
+			}
+		}
+
+		if (instance.fpsLimit)
+			instance._handler = ScrollimationWorker.Throttle(
+				handler,
+				1000 / instance.fpsLimit
+			)
+		else instance._handler = handler
+
+		if (instance.mode === 'onscroll') {
+			instance.scrollContainer.addEventListener(
+				'scroll',
+				instance._handler
+			)
+		}
+
+		this.instances.push(instance)
 	}
 
 	// Preparing to run user-defined function
@@ -35,20 +56,53 @@ class ScrollimationWorker {
 		state.scrollLeft = scrollLeft
 		let scrollPosition = state.direction === 'top' ? scrollTop : scrollLeft
 
-		// if (state.from === scrollPosition) state.start(state)
-		// if (state.to === scrollPosition) state.end(state)
-
 		if (scrollPosition >= state.from && !state.startEmitted) {
+			if (state.direction === 'top') {
+				state.scrollTop = state.from
+			} else {
+				state.scrollLeft = state.from
+			}
+
 			state.startEmitted = true
 			state.start(state)
-		} else if (scrollPosition <= state.from) state.startEmitted = false
+			state.step(state)
+		} else if (scrollPosition <= state.from && state.startEmitted) {
+			if (state.direction === 'top') {
+				state.scrollTop = state.from
+			} else {
+				state.scrollLeft = state.from
+			}
+
+			state.startEmitted = false
+			state.step(state)
+			state.reverseEnd(state)
+		}
 
 		if (scrollPosition >= state.to && !state.endEmitted) {
-			state.endEmitted = true
-			state.end(state)
-		} else if (scrollPosition <= state.to) state.endEmitted = false
+			if (state.direction === 'top') {
+				state.scrollTop = state.to
+			} else {
+				state.scrollLeft = state.to
+			}
 
-		if (scrollPosition >= state.from && scrollPosition <= state.to) state.step(state)
+			state.endEmitted = true
+			state.step(state)
+			state.end(state)
+		} else if (scrollPosition <= state.to && state.endEmitted) {
+			if (state.direction === 'top') {
+				state.scrollTop = state.to
+			} else {
+				state.scrollLeft = state.to
+			}
+
+			state.endEmitted = false
+			state.reverseStart(state)
+			state.step(state)
+		}
+
+		if (scrollPosition > state.from && scrollPosition < state.to) {
+			state.step(state)
+		}
 	}
 
 	static Throttle(func, ms) {
@@ -115,26 +169,39 @@ class Scrollimation {
 	/**
 	 * @param {Object} config
 	 * @param {HTMLElement|NodeList|Array|String|JQuery} [config.target] - Animation target.
+	 * @param {HTMLElement|String} [config.scrollContainer] - Scroll container (default: window).
 	 * @param {Number} config.from - Position where animation begin.
 	 * @param {Number} config.to - Position where animation end.
 	 * @param {String} [config.direction] - 'top' or 'left'.
 	 * @param {String|Function} [config.easing] - Easing function ('linear', 'easeInQuad', ...).
 	 * @param {String} [config.mode] - 'requestAnimationFrame' or 'onscroll'.
+	 * @param {String} [config.fpsLimit] - Limits the number of animation steps per second.
+	 * @param {Function} [config.init] - Initialize animation callback.
 	 * @param {Function} config.step - This function is executed every time you need to change the styles of an animated element.
 	 * @param {Function} [config.start] - Executed every time when scroll position is config.from.
 	 * @param {Function} [config.end] - Executed every time when scroll position is config.to.
+	 * @param {Function} [config.reverseStart] - Executed every time when scroll position is config.from.
+	 * @param {Function} [config.reverseEnd] - Executed every time when scroll position is config.to.
 	 */
 	constructor(config) {
 		this.id = Math.random()
 			.toString(36)
 			.substr(2, 9)
+		this.scrollContainer =
+			typeof config.scrollContainer === 'string'
+				? document.querySelector(config.scrollContainer)
+				: config.scrollContainer || window
 		this.from = config.from || 0
 		this.to = config.to || 0
 		this.direction = config.direction || 'top'
 		this.mode = config.mode || 'requestAnimationFrame'
+		this.fpsLimit = config.fpsLimit
+		this.init = config.init || (() => {})
 		this.step = config.step || (() => {})
 		this.start = config.start || (() => {})
 		this.end = config.end || (() => {})
+		this.reverseStart = config.reverseStart || (() => {})
+		this.reverseEnd = config.reverseEnd || (() => {})
 		this.startEmitted = false
 		this.endEmitted = false
 
@@ -154,13 +221,22 @@ class Scrollimation {
 			)
 
 		this.easing = config.easing || 'linear'
-		this.scrollTop = ScrollimationWorker.scrollTop
-		this.scrollLeft = ScrollimationWorker.scrollLeft
+
+		// this.scrollContainer === window ?
+		this.scrollTop =
+			this.scrollContainer === window
+				? ScrollimationWorker.scrollTop
+				: this.scrollContainer.scrollTop
+		this.scrollLeft =
+			this.scrollContainer === window
+				? ScrollimationWorker.scrollLeft
+				: this.scrollContainer.scrollLeft
 
 		this.status = 'play'
 
-		this.step(this)
-		worker.instances.push(this)
+		worker.addInstance(this)
+
+		this.init(this)
 	}
 
 	/**
@@ -190,7 +266,7 @@ class Scrollimation {
 						typeof this.easing === 'function'
 							? this.easing
 							: Scrollimation.Easing[this.easing] ||
-								Scrollimation.Easing.linear
+									Scrollimation.Easing.linear
 					)
 				)
 			})
@@ -207,7 +283,7 @@ class Scrollimation {
 			typeof this.easing === 'function'
 				? this.easing
 				: Scrollimation.Easing[this.easing] ||
-					Scrollimation.Easing.linear
+						Scrollimation.Easing.linear
 		)
 	}
 
@@ -269,7 +345,8 @@ class Scrollimation {
 			},
 			// decelerating to zero velocity
 			easeOutQuart: function(t) {
-				return 1 - (--t) * t * t * t
+				/*jshint -W006 */
+				return 1 - --t * t * t * t
 			},
 			// acceleration until halfway, then deceleration
 			easeInOutQuart: function(t) {

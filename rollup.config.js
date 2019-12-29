@@ -6,7 +6,8 @@ export default {
 	output: {
 		name: 'Scrollimation',
 		file: 'dist/scrollimation.js',
-		format: 'umd'
+		format: 'umd',
+		sourcemap: true
 	},
 	plugins: [
 		babel({
