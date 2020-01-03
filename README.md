@@ -403,13 +403,13 @@ Starts the stopped animation.
 
 ```javascript
 let instance = Scrollimation({
-  target: document.querySelector('#target'),
-  from: 0,
-  to: 100,
-  status = 'pause',
-  step: (state) => {
-    state.target.style.opacity = state.calc(1, 0)
-  }
+	target: document.querySelector('#target'),
+	from: 0,
+	to: 100,
+	status: 'pause',
+	step: state => {
+		state.target.style.opacity = state.calc(1, 0)
+	}
 })
 
 instance.play()
@@ -421,15 +421,15 @@ Removes the animation handler permanently. Use if playing animation is never nee
 
 ```javascript
 Scrollimation({
-  target: document.querySelector('#target'),
-  from: 0,
-  to: 100,
-  status = 'pause',
-  step: (state) => {
-    state.target.style.opacity = state.calc(1, 0)
+	target: document.querySelector('#target'),
+	from: 0,
+	to: 100,
+	status: 'pause',
+	step: state => {
+		state.target.style.opacity = state.calc(1, 0)
 
-    if (document.body.scrollTop === state.to) state.remove() // Animation is played only once.
-  }
+		if (document.body.scrollTop === state.to) state.remove() // Animation is played only once.
+	}
 })
 
 instance.play()
