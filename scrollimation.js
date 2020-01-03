@@ -300,7 +300,14 @@ class Scrollimation {
 	// Remove instance
 	remove() {
 		this.status = 'pause'
-		worker.instances.filter(instance => instance.id !== this.id)
+
+		if (this.mode === 'onscroll') {
+			this.scrollContainer.removeEventListener('scroll', this._handler)
+		}
+
+		worker.instances = worker.instances.filter(
+			instance => instance.id !== this.id
+		)
 	}
 
 	/*
