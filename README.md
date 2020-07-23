@@ -4,7 +4,7 @@
 
 [![NPM Version](https://img.shields.io/npm/v/scrollimation.svg)](https://www.npmjs.com/package/scrollimation)
 [![License](https://img.shields.io/npm/l/scrollimation.svg)](https://www.npmjs.com/package/scrollimation)
-[![Travis (.org)](https://img.shields.io/travis/ArtRinor/Scrollimation.svg)](https://travis-ci.org/ArtRinor/Scrollimation)
+[![Travis (.org)](https://img.shields.io/travis/illia-chyrkov/Scrollimation.svg)](https://travis-ci.org/illia-chyrkov/Scrollimation)
 [![npm bundle size (minified + gzip)](https://img.shields.io/bundlephobia/minzip/scrollimation.svg)](https://bundlephobia.com/result?p=scrollimation)
 [![Code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat)](https://github.com/prettier/prettier)
 
@@ -25,63 +25,41 @@ Or load via **CDN**.
 ### Usage
 
 ```javascript
-import Scrollimation from 'scrollimation'
+import Scrollimation from "scrollimation";
 
-let instance = Scrollimation({
-	target: '#target',
-	from: 0,
-	to: 100,
-	step: function(state) {
-		let rotate = state.calc(0, 180)
-		let opacity = state.calc(1, 0)
+let instance = new Scrollimation({
+  target: "#target",
+  from: 0,
+  to: 100,
+  step: function (state) {
+    let rotate = state.calc(0, 180);
+    let opacity = state.calc(1, 0);
 
-		state.target[0].style.transform = `rotate(${rotate}deg)`
-		state.target[0].style.opacity = opacity
-	}
-})
-```
-
-If you use jQuery try this:
-
-```javascript
-import $ from 'jquery'
-window.$ = $
-require('scrollimation')
-
-let instance = $('#target').scrollimation({
-	from: 0,
-	to: 100,
-	step: function(state) {
-		let rotate = state.calc(0, 180)
-		let opacity = state.calc(1, 0)
-
-		state.target.css({
-			transform: `rotate(${rotate}deg)`,
-			opacity
-		})
-	}
-})
+    state.target[0].style.transform = `rotate(${rotate}deg)`;
+    state.target[0].style.opacity = opacity;
+  },
+});
 ```
 
 ## Options
 
 ### target
 
-| Default     | Type                                                 |
-| :---------- | :--------------------------------------------------- |
-| `undefined` | HTMLElement \| NodeList \| Array \| String \| JQuery |
+| Default     | Type                                       |
+| :---------- | :----------------------------------------- |
+| `undefined` | HTMLElement \| NodeList \| Array \| String |
 
 Stores the value in the state. If it is a NodeList it is converted to an Array. You can leave this parameter empty.
 
 ```javascript
-Scrollimation({
-	target: document.querySelector('#target'),
-	from: 0,
-	to: 100,
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
-	}
-})
+new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 0,
+  to: 100,
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
+  },
+});
 ```
 
 ### scrollContainer
@@ -93,15 +71,15 @@ Scrollimation({
 Change this value if it is assumed that the scroll position does not depend on page scrolling.
 
 ```javascript
-Scrollimation({
-	target: document.querySelector('#target'),
-	scrollContainer: document.querySelector('#container'),
-	from: 0,
-	to: 100,
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
-	}
-})
+new Scrollimation({
+  target: document.querySelector("#target"),
+  scrollContainer: document.querySelector("#container"),
+  from: 0,
+  to: 100,
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
+  },
+});
 ```
 
 ### from
@@ -113,14 +91,14 @@ Scrollimation({
 The scroll position from which animation begins. In `step` function with current scroll position `state.calc` returns a value equal to its first parameter.
 
 ```javascript
-Scrollimation({
-	target: document.querySelector('#target'),
-	from: 100,
-	to: 200,
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
-	}
-})
+new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 100,
+  to: 200,
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
+  },
+});
 ```
 
 ### to
@@ -132,14 +110,14 @@ Scrollimation({
 The scroll position from which animation ends. In `step` function with current scroll position `state.calc` returns a value equal to its second parameter.
 
 ```javascript
-Scrollimation({
-	target: document.querySelector('#target'),
-	from: 0,
-	to: 100,
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
-	}
-})
+new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 0,
+  to: 100,
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
+  },
+});
 ```
 
 ### direction
@@ -151,15 +129,15 @@ Scrollimation({
 Use if you need an animation on the horizontal scrolling.
 
 ```javascript
-Scrollimation({
-	target: document.querySelector('#target'),
-	from: 0,
-	to: 100,
-	duration: 'left',
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
-	}
-})
+new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 0,
+  to: 100,
+  duration: "left",
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
+  },
+});
 ```
 
 ### easing
@@ -180,28 +158,28 @@ Determines the acceleration curve of your animation.
 You can use custom function:
 
 ```javascript
-Scrollimation({
-	target: document.querySelector('#target'),
-	from: 0,
-	to: 100,
-	easing: val => val * val,
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
-	}
-})
+new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 0,
+  to: 100,
+  easing: (val) => val * val,
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
+  },
+});
 ```
 
 Also you can use for each `state.calc` different easing function:
 
 ```javascript
-Scrollimation({
-	target: document.querySelector('#target'),
-	from: 0,
-	to: 100,
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0, 'easeInOutQuad')
-	}
-})
+new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 0,
+  to: 100,
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0, "easeInOutQuad");
+  },
+});
 ```
 
 ### mode
@@ -213,15 +191,15 @@ Scrollimation({
 If your animation is too heavy, you can try using `mode: 'onscroll'`.
 
 ```javascript
-Scrollimation({
-	target: document.querySelector('#target'),
-	from: 0,
-	to: 100,
-	mode: 'onscroll',
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
-	}
-})
+new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 0,
+  to: 100,
+  mode: "onscroll",
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
+  },
+});
 ```
 
 ### fpsLimit
@@ -234,15 +212,15 @@ If your animation is too heavy, you can also limits the number of animation step
 You can try to combine this with `mode: 'onscroll'`.
 
 ```javascript
-Scrollimation({
-	target: document.querySelector('#target'),
-	from: 0,
-	to: 100,
-	fpsLimit: 30,
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
-	}
-})
+new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 0,
+  to: 100,
+  fpsLimit: 30,
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
+  },
+});
 ```
 
 ### step
@@ -254,16 +232,16 @@ Scrollimation({
 This function is called to redraw animated elements. The parameter is an instance of the animation. Inside the animation instance, you can use the `state.calc` function, using which you can calculate the animated values.
 
 ```javascript
-Scrollimation({
-	target: document.querySelector('#target'),
-	from: 0,
-	to: 100,
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
-		// if scrollTop === state.from (0) state.calc(1, 0) return 1
-		// else if scrollTop === state.to (100) state.calc(1, 0) return 0
-	}
-})
+new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 0,
+  to: 100,
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
+    // if scrollTop === state.from (0) state.calc(1, 0) return 1
+    // else if scrollTop === state.to (100) state.calc(1, 0) return 0
+  },
+});
 ```
 
 ### init
@@ -275,17 +253,17 @@ Scrollimation({
 This function is called when `Scrollimation` initialize current animation instance when the animation is not already running.
 
 ```javascript
-Scrollimation({
-	target: document.querySelector('#target'),
-	from: 0,
-	to: 100,
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
-	},
-	init: state => {
-		console.log('Animation instance initialized!')
-	}
-})
+new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 0,
+  to: 100,
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
+  },
+  init: (state) => {
+    console.log("Animation instance initialized!");
+  },
+});
 ```
 
 ### start
@@ -298,17 +276,17 @@ This function called when the animation begins when the scroll position is state
 It called before the first `step` function is called.
 
 ```javascript
-Scrollimation({
-	target: document.querySelector('#target'),
-	from: 0,
-	to: 100,
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
-	},
-	start: state => {
-		console.log('Current scroll position is ' + state.from)
-	}
-})
+new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 0,
+  to: 100,
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
+  },
+  start: (state) => {
+    console.log("Current scroll position is " + state.from);
+  },
+});
 ```
 
 ### end
@@ -321,17 +299,17 @@ This function called when the animation ends when the scroll position is state.t
 It called after the last `step` function is called.
 
 ```javascript
-Scrollimation({
-	target: document.querySelector('#target'),
-	from: 0,
-	to: 100,
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
-	},
-	end: state => {
-		console.log('Current scroll position is ' + state.to)
-	}
-})
+new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 0,
+  to: 100,
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
+  },
+  end: (state) => {
+    console.log("Current scroll position is " + state.to);
+  },
+});
 ```
 
 ### reverseStart
@@ -343,17 +321,17 @@ Scrollimation({
 This function called when the reverse animation begins when the scroll position is state.to. (Only while scrolling from state.to to state.from)
 
 ```javascript
-Scrollimation({
-	target: document.querySelector('#target'),
-	from: 0,
-	to: 100,
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
-	},
-	reverseStart: state => {
-		console.log('Current scroll position is ' + state.to)
-	}
-})
+new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 0,
+  to: 100,
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
+  },
+  reverseStart: (state) => {
+    console.log("Current scroll position is " + state.to);
+  },
+});
 ```
 
 ### reverseEnd
@@ -365,17 +343,17 @@ Scrollimation({
 This function called when the reverse animation ends when the scroll position is state.from. (Only while scrolling from state.to to state.from)
 
 ```javascript
-Scrollimation({
-	target: document.querySelector('#target'),
-	from: 0,
-	to: 100,
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
-	},
-	reverseEnd: state => {
-		console.log('Current scroll position is ' + state.from)
-	}
-})
+new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 0,
+  to: 100,
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
+  },
+  reverseEnd: (state) => {
+    console.log("Current scroll position is " + state.from);
+  },
+});
 ```
 
 ## Additional functions
@@ -385,16 +363,16 @@ Scrollimation({
 Stops the animation.
 
 ```javascript
-let instance = Scrollimation({
-	target: document.querySelector('#target'),
-	from: 0,
-	to: 100,
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
-	}
-})
+let instance = new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 0,
+  to: 100,
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
+  },
+});
 
-instance.stop()
+instance.stop();
 ```
 
 ### play
@@ -402,17 +380,17 @@ instance.stop()
 Starts the stopped animation.
 
 ```javascript
-let instance = Scrollimation({
-	target: document.querySelector('#target'),
-	from: 0,
-	to: 100,
-	status: 'pause',
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
-	}
-})
+let instance = new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 0,
+  to: 100,
+  status: "pause",
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
+  },
+});
 
-instance.play()
+instance.play();
 ```
 
 ### remove
@@ -420,19 +398,19 @@ instance.play()
 Removes the animation handler permanently. Use if playing animation is never needed again.
 
 ```javascript
-Scrollimation({
-	target: document.querySelector('#target'),
-	from: 0,
-	to: 100,
-	status: 'pause',
-	step: state => {
-		state.target.style.opacity = state.calc(1, 0)
+new Scrollimation({
+  target: document.querySelector("#target"),
+  from: 0,
+  to: 100,
+  status: "pause",
+  step: (state) => {
+    state.target.style.opacity = state.calc(1, 0);
 
-		if (document.body.scrollTop === state.to) state.remove() // Animation is played only once.
-	}
-})
+    if (document.body.scrollTop === state.to) state.remove(); // Animation is played only once.
+  },
+});
 
-instance.play()
+instance.play();
 ```
 
 ## Running the tests
@@ -443,7 +421,7 @@ npm test
 
 ## Author
 
--   **Ilya Chirkov** - _Initial work_ - [ArtRinor](https://github.com/ArtRinor)
+- **Illia Chyrkov** - _Initial work_ - [illia-chyrkov](https://github.com/illia-chyrkov)
 
 ## License
 

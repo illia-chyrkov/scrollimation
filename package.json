@@ -1,50 +1,55 @@
 {
-	"name": "scrollimation",
-	"version": "1.1.1",
-	"description": "A flexible library for animation of elements on scroll.",
-	"keywords": [
-		"animation",
-		"scroll"
-	],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/ArtRinor/Scrollimation"
-	},
-	"bugs": {
-		"url": "https://github.com/ArtRinor/Scrollimation/issues"
-	},
-	"main": "dist/scrollimation.js",
-	"watch": {
-		"test": {
-			"patterns": [
-				"scrollimation.js",
-				"test/"
-			],
-			"quiet": true
-		}
-	},
-	"scripts": {
-		"start": "npm-watch",
-		"build": "rollup --config rollup.config.js",
-		"pretest": "npm run build | jshint scrollimation.js test/",
-		"test": "mocha --reporter spec --exit"
-	},
-	"author": "Chirkov Ilya",
-	"license": "MIT",
-	"pre-commit": [
-		"build"
-	],
-	"devDependencies": {
-		"@babel/core": "^7.7.7",
-		"@babel/preset-env": "^7.7.7",
-		"jquery": "^3.3.1",
-		"jsdom": "^12.0.0",
-		"jshint": "^2.10.3",
-		"mocha": "^5.2.0",
-		"npm-watch": "^0.4.0",
-		"pre-commit": "^1.2.2",
-		"rollup": "^0.65.2",
-		"rollup-plugin-babel": "^4.0.3",
-		"rollup-plugin-uglify": "^5.0.2"
-	}
+  "name": "scrollimation",
+  "version": "3.0.0",
+  "description": "A flexible library for animation of elements on scroll.",
+  "keywords": [
+    "animation",
+    "scroll"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/illia-chyrkov/Scrollimation"
+  },
+  "bugs": {
+    "url": "https://github.com/illia-chyrkov/Scrollimation/issues"
+  },
+  "main": "dist/scrollimation.umd.js",
+  "module": "dist/scrollimation.esm.js",
+  "unpkg": "dist/scrollimation.min.js",
+  "types": "dist/scrollimation.d.ts",
+  "watch": {
+    "test": {
+      "patterns": [
+        "src/**/*",
+        "test/**/*"
+      ],
+      "extensions": "js,ts",
+      "quiet": true
+    }
+  },
+  "scripts": {
+    "start": "npm-watch",
+    "build": "rollup --config rollup.config.js",
+    "pretest": "npm run build",
+    "test": "mocha --reporter spec --exit"
+  },
+  "author": "Illia Chyrkov",
+  "license": "MIT",
+  "pre-commit": [
+    "build"
+  ],
+  "devDependencies": {
+    "@rollup/plugin-buble": "^0.21.3",
+    "buble": "^0.20.0",
+    "jsdom": "^16.3.0",
+    "mocha": "^8.0.1",
+    "npm-watch": "^0.6.0",
+    "pre-commit": "^1.2.2",
+    "rollup": "^2.23.0",
+    "rollup-plugin-terser": "^6.1.0",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "terser": "^4.8.0",
+    "tslib": "^2.0.0",
+    "typescript": "^3.9.7"
+  }
 }

@@ -1,18 +1,38 @@
-import babel from 'rollup-plugin-babel'
-import { uglify } from 'rollup-plugin-uglify'
+import typescript from "rollup-plugin-typescript2";
+import buble from "@rollup/plugin-buble";
+import { terser } from "rollup-plugin-terser";
 
-export default {
-	input: 'scrollimation.js',
-	output: {
-		name: 'Scrollimation',
-		file: 'dist/scrollimation.js',
-		format: 'umd',
-		sourcemap: true
-	},
-	plugins: [
-		babel({
-			exclude: 'node_modules/**'
-		}),
-		uglify()
-	]
-}
+import pkg from "./package.json";
+
+export default [
+  {
+    input: "src/scrollimation.ts",
+    output: {
+      name: "Scrollimation",
+      file: pkg.main,
+      format: "umd",
+      sourcemap: true,
+    },
+    plugins: [typescript(), buble(), terser()],
+  },
+  {
+    input: "src/scrollimation.ts",
+    output: {
+      name: "Scrollimation",
+      file: pkg.module,
+      format: "es",
+      sourcemap: true,
+    },
+    plugins: [typescript(), terser()],
+  },
+  {
+    input: "src/scrollimation.ts",
+    output: {
+      name: "Scrollimation",
+      file: pkg.unpkg,
+      format: "iife",
+      sourcemap: true,
+    },
+    plugins: [typescript(), buble(), terser()],
+  },
+];
