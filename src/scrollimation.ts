@@ -10,8 +10,8 @@ class ScrollimationWorker {
   }
 
   public static addInstance(instance: Scrollimation) {
-    const handler = () => {
-      if (instance.status === "play") {
+    const handler = (forcedRun: boolean = false) => {
+      if (instance.status === "play" || forcedRun) {
         const scrollTop =
           instance.scrollContainer instanceof window.Element
             ? instance.scrollContainer.scrollTop
@@ -21,7 +21,7 @@ class ScrollimationWorker {
             ? instance.scrollContainer.scrollLeft
             : ScrollimationWorker.scrollLeft;
 
-        ScrollimationWorker.animate(scrollTop, scrollLeft, instance);
+        ScrollimationWorker.animate(scrollTop, scrollLeft, instance, forcedRun);
       }
     };
 
@@ -40,6 +40,9 @@ class ScrollimationWorker {
     }
 
     ScrollimationWorker.instances.push(instance);
+
+    // Draw initial state
+    handler(true);
   }
 
   public static removeInstance(instance: Scrollimation) {
@@ -51,7 +54,8 @@ class ScrollimationWorker {
   public static animate(
     scrollTop: number,
     scrollLeft: number,
-    state: Scrollimation
+    state: Scrollimation,
+    forcedRun: boolean = false
   ) {
     state.scrollTop = scrollTop;
     state.scrollLeft = scrollLeft;
@@ -101,7 +105,10 @@ class ScrollimationWorker {
       state.step(state);
     }
 
-    if (scrollPosition > state.from && scrollPosition < state.to) {
+    if (
+      (scrollPosition > state.from && scrollPosition < state.to) ||
+      forcedRun
+    ) {
       state.step(state);
     }
   }
@@ -155,7 +162,7 @@ ScrollimationWorker.run();
 
 interface ScrollimationConfig {
   /** Animation target. */
-  target: HTMLElement | NodeList | Array<HTMLElement> | string;
+  target?: HTMLElement | NodeList | Array<HTMLElement> | string;
   /** Scroll container (default: window).*/
   scrollContainer?: HTMLElement | string;
   /** Position where animation begin. */

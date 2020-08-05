@@ -1,6 +1,6 @@
 interface ScrollimationConfig {
     /** Animation target. */
-    target: HTMLElement | NodeList | Array<HTMLElement> | string;
+    target?: HTMLElement | NodeList | Array<HTMLElement> | string;
     /** Scroll container (default: window).*/
     scrollContainer?: HTMLElement | string;
     /** Position where animation begin. */

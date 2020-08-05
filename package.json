@@ -1,6 +1,6 @@
 {
   "name": "scrollimation",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A flexible library for animation of elements on scroll.",
   "keywords": [
     "animation",
